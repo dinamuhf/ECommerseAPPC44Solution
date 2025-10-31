@@ -62,7 +62,7 @@ namespace Presistance.Data.DataSeed
             }
             #endregion
 
-         await   _dbContext.SaveChanges();
+            await _dbContext.SaveChanges();
 
             #endregion
         }
