@@ -2,6 +2,8 @@ using DomainLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presistance.Data;
 using Presistance.Data.DataSeed;
+using Presistance.Repositories;
+using Service;
 
 namespace ECommerseAPPC04
 {
@@ -21,7 +23,8 @@ namespace ECommerseAPPC04
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDataSeeding,DataSeeding>();
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
             #endregion
 
 
@@ -46,6 +49,8 @@ namespace ECommerseAPPC04
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
 
             app.UseAuthorization();
 
