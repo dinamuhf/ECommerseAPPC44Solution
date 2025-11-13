@@ -30,7 +30,7 @@ namespace Presistance.Data.DataSeed
                 if (brands != null && brands.Any())
                 {
                     await _dbContext.ProductBrands.AddRangeAsync(brands);
-                    await _dbContext.SaveChangesAsync(); // ✅ ضروري نحفظ هنا
+                    await _dbContext.SaveChangesAsync();
                 }
             }
             #endregion
@@ -56,7 +56,7 @@ namespace Presistance.Data.DataSeed
                 if (products != null && products.Any())
                 {
                     await _dbContext.Products.AddRangeAsync(products);
-                    await _dbContext.SaveChangesAsync(); // ✅ نحفظ بعد إدخال المنتجات
+                    await _dbContext.SaveChangesAsync(); 
                 }
             }
             #endregion

@@ -2,6 +2,7 @@
 using DomainLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Presistance.Data;
+using Service.specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,5 +33,17 @@ namespace Presistance.Repositories
 
         public void Delete(TEntity entity)
        => _dbContext.Set<TEntity>().Remove(entity);
+
+        #region with specifications
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+          return await  SpecificationsEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications).ToListAsync();
+        }
+
+        public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+           return await SpecificationsEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications).FirstOrDefaultAsync();
+        }
+        #endregion
     }
 }

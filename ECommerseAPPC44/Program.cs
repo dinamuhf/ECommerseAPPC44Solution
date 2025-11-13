@@ -25,6 +25,7 @@ namespace ECommerseAPPC04
             builder.Services.AddScoped<IDataSeeding,DataSeeding>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
+           
             #endregion
 
 
