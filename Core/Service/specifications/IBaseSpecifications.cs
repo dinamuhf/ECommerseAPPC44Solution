@@ -1,5 +1,5 @@
 ﻿using DomainLayer.Contracts;
-using DomainLayer.Models; // Ensure this is present for BaseEntity
+using DomainLayer.Models.ProductModule;
 using System.Linq.Expressions;
 
 namespace Service.specifications

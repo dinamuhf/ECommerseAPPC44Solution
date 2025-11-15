@@ -1,16 +1,23 @@
 using DomainLayer.Contracts;
 using ECommerseAPPC04.CustomsMiddleWares;
+using ECommerseAPPC04.Extentions;
+using ECommerseAPPC04.Factories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Presistance.Data;
 using Presistance.Data.DataSeed;
 using Presistance.Repositories;
 using Service;
+using ServiceAbstraction;
+using Shared.ErrorModels;
+using StackExchange.Redis;
 
 namespace ECommerseAPPC04
 {
     public class Program
     {
-        public  static  async Task Main(string[] args)
+        public  static  async Task<ConnectionMultiplexer> Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -19,14 +26,16 @@ namespace ECommerseAPPC04
             builder.Services.AddControllers();
 
             #region configure services
-            builder.Services.AddDbContext<StoreDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
+          builder.Services.AddInfraStructureService(builder.Configuration);
             builder.Services.AddScoped<IDataSeeding,DataSeeding>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
-           
+            builder.Services.AddCoreServices();
+            builder.Services.AddPresentationServices();
+            builder.Services.AddScoped<IBasketRepository,BasketRepository>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>((_))=>{
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RediscConnection"));
+                    }
+            }
+
             #endregion
 
 
@@ -42,7 +51,8 @@ namespace ECommerseAPPC04
             var ObjectOfdataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
           await  ObjectOfdataSeeding.DataSeedAsync();
             #endregion
-            app.UseMiddleware<CustomExceptionHandlerMiddleWare>();
+          app.UseCustomMiddlewareExeptions();
+          await  app.SeedDbAsync();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

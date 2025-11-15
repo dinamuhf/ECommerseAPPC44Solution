@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using DomainLayer.Models;
+using DomainLayer.Models.BasketModule;
+using DomainLayer.Models.ProductModule;
 using Shared.DTOS;
+using Shared.DTOS.BasketDtos;
 
 namespace Service
 {
@@ -24,6 +26,10 @@ namespace Service
 
 
 
+            #endregion
+            #region Basket
+            CreateMap<CustomerBasket, BasketDto>().ReverseMap;
+            CreateMap<BasketItem, BasketItemDto>().ReverseMap;
             #endregion
         }
     }
