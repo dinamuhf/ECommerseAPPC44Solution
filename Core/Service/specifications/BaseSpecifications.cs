@@ -22,6 +22,20 @@ namespace Service.specifications
         protected void AddOrderBy(Expression<Func<TEntity, object>> orderByAsc)
        =>  OrderBy = orderByAsc;
         public Expression<Func<TEntity, object>> OrderByDescending { get; private set; }
+
+        #region pagination
+        public int Take {  get;  private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPagination {  get;  set; }
+        protected void ApplyPagination (int PageSize, int PageIndex)
+        {
+            IsPagination= true;
+                Take= PageSize;
+            Skip= (PageIndex-1)* PageSize;
+        }
+        #endregion
         protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDesc)
             => OrderByDescending = orderByDesc;
 

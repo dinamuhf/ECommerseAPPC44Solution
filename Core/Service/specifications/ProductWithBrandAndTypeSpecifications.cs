@@ -21,8 +21,9 @@ namespace Service.specifications
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductTybe);
+            ApplyPagination(queryParams.PageSize, queryParams.PageIndex);
             #region Sorting
-            switch (queryParams.sortingOptions)
+            switch (queryParams.SortingOptions)
             {
                 case ProductSortingOptions.NameAsc:AddOrderBy(P=>P.Name);
                     break;

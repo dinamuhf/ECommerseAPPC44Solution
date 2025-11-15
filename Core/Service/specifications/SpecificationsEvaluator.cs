@@ -30,6 +30,10 @@ namespace Service.specifications
             {
                 Query = specifications.IncludeExpression.Aggregate(Query, (currentQuery, includeExp) => currentQuery.Include(includeExp));
             }
+            if (specifications.IsPagination)
+            {
+                Query=Query.Skip(specifications.Skip).Take(specifications.Take);
+            }
             return Query;
         }
     }

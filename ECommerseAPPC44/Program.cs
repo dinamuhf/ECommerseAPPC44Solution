@@ -1,4 +1,5 @@
 using DomainLayer.Contracts;
+using ECommerseAPPC04.CustomsMiddleWares;
 using Microsoft.EntityFrameworkCore;
 using Presistance.Data;
 using Presistance.Data.DataSeed;
@@ -41,7 +42,7 @@ namespace ECommerseAPPC04
             var ObjectOfdataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
           await  ObjectOfdataSeeding.DataSeedAsync();
             #endregion
-
+            app.UseMiddleware<CustomExceptionHandlerMiddleWare>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

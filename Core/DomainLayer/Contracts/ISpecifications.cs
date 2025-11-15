@@ -16,5 +16,13 @@ namespace DomainLayer.Contracts
 
         Expression<Func<TEntity,object>> OrderBy{get; }
         Expression<Func<TEntity, object>> OrderByDescending { get; }
-        }
+
+        #region Pagination
+        public int Take {  get;}
+        public int Skip { get; }
+
+        public bool IsPagination { get; set; }
+
+        #endregion
+    }
 }
