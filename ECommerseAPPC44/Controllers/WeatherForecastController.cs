@@ -1,7 +1,6 @@
-using ECommerseAPPC04;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerseAPPC44.Controllers
+namespace E_CommerceWebAPPC44G01.Controllers
 {
     [ApiController]
     [Route("[controller]")]

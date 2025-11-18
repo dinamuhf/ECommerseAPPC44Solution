@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.Exceptions
+namespace DomianLayer.Exceptions
 {
-    public sealed class BasketNotFoundException(string Id):NotFoundException($"Basket with Id={Id}not found")
+    public class BasketNotFoundException(string Id):NotFoundException($"Basket With Id ={Id} is not Found")
     {
     }
 }

@@ -1,6 +1,9 @@
 ﻿using DomainLayer.Contracts;
 using DomainLayer.Models.ProductModule;
+using DomianLayer.Models.IdentityModule;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Persistance.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Presistance.Data.DataSeed
 {
-    public class DataSeeding(StoreDbContext _dbContext) : IDataSeeding
+    public class DataSeeding(StoreDbContext _dbContext, UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager) : IDataSeeding
     {
         public async Task DataSeedAsync()
         {
@@ -56,12 +59,58 @@ namespace Presistance.Data.DataSeed
                 if (products != null && products.Any())
                 {
                     await _dbContext.Products.AddRangeAsync(products);
-                    await _dbContext.SaveChangesAsync(); 
+                    await _dbContext.SaveChangesAsync();
                 }
             }
             #endregion
 
             #endregion
+        }
+
+        public async Task IdentityDataSeed()
+        {
+            try
+            {
+                if (!_roleManager.Roles.Any())
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+                    await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+
+
+                }
+                if (!_userManager.Users.Any())
+                {
+                    var User01 = new ApplicationUser
+                    {
+                        DisplayName = "Mohamed Ali",
+                        Email = "Mohamed@gmail.com:",
+                        PhoneNumber = "01012345678",
+                        UserName = "MohamedAli",
+                        EmailConfirmed = true
+
+                    };
+                    var User02 = new ApplicationUser
+                    {
+                        DisplayName = "salma Ali",
+                        Email = "salam@gmail.com:",
+                        PhoneNumber = "010122345678",
+                        UserName = "salamAli",
+                        EmailConfirmed = true
+
+                    };
+                    await _userManager.CreateAsync(User01, "Pa$$w0rd");
+                    await _userManager.CreateAsync(User02, "Pa$$w0rd");
+                    await _userManager.AddToRoleAsync(User01, "Admin");
+                    await _userManager.AddToRoleAsync(User02, "SuperAdmin");
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

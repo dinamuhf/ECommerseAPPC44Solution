@@ -1,4 +1,5 @@
-﻿using DomainLayer.Models.ProductModule;
+﻿using DomainLayer.Models;
+using DomainLayer.Models.ProductModule;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace DomainLayer.Contracts
 {
     public interface IUnitOfWork
     {
-      IGenericRepository<TEntity, TKey>GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
-        Task  <int> saveChanges();
+        //public IGenericRepository<Product,int>ProductRepository { get; }
+        IGenericRepository<TEntity, Tkey> GetRepository<TEntity, Tkey>() where TEntity : BaseEntity<Tkey>;
+        Task<int> SaveChangesAsync();
     }
 }

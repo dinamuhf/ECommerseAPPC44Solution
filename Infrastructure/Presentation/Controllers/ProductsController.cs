@@ -1,61 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ServiceAbstraction;
-using Shared;
-using Shared.DTOS;
-using Shared.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-
-
-namespace Presentation.Controllers
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ServiceAbstraction;
+using Shared;
+using Shared.Dtos.ProductModule;
+namespace Persentation.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")] 
-    public class ProductsController(IServiceManager _serviceManager): ControllerBase
+    
+    public class ProductsController(IServiceManager _serviceManager) : APIBaseController
     {
-        #region GetAllProducts
+        #region Get All Products
+        //[Authorize]
         [HttpGet]
-        public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProducts([FromQuery]ProductQueryParams queryParams)
+        public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery] ProductQueryParams queryParams)
         {
-            var Products = await _serviceManager.ProductService.GetAllproductsAsync(queryParams);
+
+            var Products = await _serviceManager.ProductService.GetAllProductsAsync(queryParams);
             return Ok(Products);
         }
         #endregion
-
         #region GetProductById
-        [ProducesResponseType(typeof(ErrorDetails),(int)HttpStatusCode.NotFound)]
-         [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
-          [ProducesResponseType(typeof(ValidationErrorResponse), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(productResultDto), (int)HttpStatusCode.OK)]
         [HttpGet("{Id}")]
-        public async Task<ActionResult<ProductDto>> GetProduct(int id)
+        public async Task<ActionResult<ProductResultDto>> GetProduct(int Id)
         {
-            var product = await _serviceManager.ProductService.GetProductByIdAsync(id);
-            return Ok(product);
-
+            var Product = await _serviceManager.ProductService.GetProductByIdAsync(Id);
+            return Ok(Product);
         }
 
         #endregion
-
-        #region GetAllTypes
-                [HttpGet("Types")]  
-                public async Task<ActionResult<IEnumerable<TypeDto>>> GetAllTypes()
-                {
-                    var Types = await _serviceManager.ProductService.GetAllTypesAsync();
-                    return Ok(Types);
+        #region Get All Types
+        [HttpGet("Types")]
+        public async Task<ActionResult<IEnumerable<TypeResultDto>>> GetTypes()
+        {
+            var Types = await _serviceManager.ProductService.GetAllTypesAsync();
+            return Ok(Types);
         }
         #endregion
-        #region GetAllBrands
+        #region Get All Brands
         [HttpGet("Brands")]
-        public async Task<ActionResult<IEnumerable<BrandDto>>> GetAllBrands()
+        public async Task<ActionResult<IEnumerable<BrandResultDto>>> GetBrands()
         {
             var Brands = await _serviceManager.ProductService.GetAllBrandsAsync();
             return Ok(Brands);
+
         }
         #endregion
     }
 }
+

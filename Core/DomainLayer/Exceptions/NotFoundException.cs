@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.Exceptions
+namespace DomianLayer.Exceptions
 {
-    public abstract class NotFoundException(string Message):Exception(Message)
+    public class NotFoundException(string Message):Exception(Message)
     {
-
     }
 }

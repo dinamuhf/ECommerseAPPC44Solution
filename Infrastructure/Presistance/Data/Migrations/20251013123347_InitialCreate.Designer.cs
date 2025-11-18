@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Presistance.Data;
+using Persistance.Data;
 
 #nullable disable
 
-namespace Presistance.Data.Migrations
+namespace Persistance.Data.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20251024142048_InitialCreate")]
+    [Migration("20251013123347_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace Presistance.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.21")
+                .HasAnnotation("ProductVersion", "8.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -50,14 +50,14 @@ namespace Presistance.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(7,2)");
 
-                    b.Property<int>("TybeId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("TybeId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Products");
                 });
@@ -79,7 +79,7 @@ namespace Presistance.Data.Migrations
                     b.ToTable("ProductBrands");
                 });
 
-            modelBuilder.Entity("DomainLayer.Models.ProductTybe", b =>
+            modelBuilder.Entity("DomainLayer.Models.ProductType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,7 +93,7 @@ namespace Presistance.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTybess");
+                    b.ToTable("ProductTypes");
                 });
 
             modelBuilder.Entity("DomainLayer.Models.Product", b =>
@@ -104,15 +104,15 @@ namespace Presistance.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DomainLayer.Models.ProductTybe", "ProductTybe")
+                    b.HasOne("DomainLayer.Models.ProductType", "ProductType")
                         .WithMany()
-                        .HasForeignKey("TybeId")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ProductBrand");
 
-                    b.Navigation("ProductTybe");
+                    b.Navigation("ProductType");
                 });
 #pragma warning restore 612, 618
         }

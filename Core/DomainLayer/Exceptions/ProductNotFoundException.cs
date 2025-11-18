@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.Exceptions
+namespace DomianLayer.Exceptions
 {
-    public class ProductNotFoundException(int Id) :NotFoundException("The Product With Id={Id} Is Not Found")
+    public sealed class ProductNotFoundException(int id):NotFoundException($"Product With Id = {id} Is Not Found")
     {
     }
 }

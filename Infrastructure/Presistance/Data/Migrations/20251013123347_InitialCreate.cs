@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Presistance.Data.Migrations
+namespace Persistance.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -24,7 +24,7 @@ namespace Presistance.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductTybess",
+                name: "ProductTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -33,7 +33,7 @@ namespace Presistance.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductTybess", x => x.Id);
+                    table.PrimaryKey("PK_ProductTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,11 +43,11 @@ namespace Presistance.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(7,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(7,2)", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
-                    TybeId = table.Column<int>(type: "int", nullable: false)
+                    TypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,9 +59,9 @@ namespace Presistance.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_ProductTybess_TybeId",
-                        column: x => x.TybeId,
-                        principalTable: "ProductTybess",
+                        name: "FK_Products_ProductTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "ProductTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -72,9 +72,9 @@ namespace Presistance.Data.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_TybeId",
+                name: "IX_Products_TypeId",
                 table: "Products",
-                column: "TybeId");
+                column: "TypeId");
         }
 
         /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace Presistance.Data.Migrations
                 name: "ProductBrands");
 
             migrationBuilder.DropTable(
-                name: "ProductTybess");
+                name: "ProductTypes");
         }
     }
 }
