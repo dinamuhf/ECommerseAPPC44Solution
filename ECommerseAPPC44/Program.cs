@@ -1,19 +1,7 @@
-
-using DomainLayer.Contracts;
-using DomianLayer.Contracts;
 using E_CommerceWebAPPC44G01.CustomMiddleWares;
 using E_CommerceWebAPPC44G01.Extensions;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.EntityFrameworkCore;
 using Persistance;
-using Persistance.Data;
-using Persistance.Data.DataSeed;
-using Persistance.Repositories;
-using Presistance.Repositories;
 using Service;
-using ServiceAbstraction;
-using Services.MappingProfiles;
-using StackExchange.Redis;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text.Json;
 

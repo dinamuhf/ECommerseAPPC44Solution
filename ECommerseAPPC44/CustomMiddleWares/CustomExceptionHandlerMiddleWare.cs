@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using Azure;
-using DomainLayer.Exceptions;
 using DomianLayer.Exceptions;
 using Shared.ErrorModels;
 
@@ -11,7 +9,7 @@ namespace E_CommerceWebAPPC44G01.CustomMiddleWares
         private readonly RequestDelegate _next;
         private readonly ILogger<CustomExceptionHandlerMiddleWare> _logger;
 
-        public  CustomExceptionHandlerMiddleWare(RequestDelegate Next,ILogger<CustomExceptionHandlerMiddleWare> logger)
+        public CustomExceptionHandlerMiddleWare(RequestDelegate Next, ILogger<CustomExceptionHandlerMiddleWare> logger)
         {
             _next = Next;
             _logger = logger;
@@ -36,8 +34,6 @@ namespace E_CommerceWebAPPC44G01.CustomMiddleWares
             httpContext.Response.StatusCode = ex switch
             {
                 NotFoundException => StatusCodes.Status404NotFound,
-                UnauthorizedException => StatusCodes.Status401Unauthorized,
-                BadRequestException badRequestException => GetBadRequestErrors(badRequestException, response),
                 _ => StatusCodes.Status500InternalServerError
             };
             httpContext.Response.ContentType = "application/json";
@@ -48,14 +44,11 @@ namespace E_CommerceWebAPPC44G01.CustomMiddleWares
                 ErrorMessage = ex.Message
 
             };
+            //var ResponseToReturn = JsonSerializer.Serialize(Response);
+            //await httpContext.Response.WriteAsync(ResponseToReturn);
             await httpContext.Response.WriteAsJsonAsync(Response);
         }
 
-        private static int GetBadRequestErrors(BadRequestException badRequestException, ErrorToReturn response)
-        {
-           response.Errors = badRequestException.Errors;
-            return StatusCodes.Status400BadRequest;
-        }
         private static async Task HnadleNotFoundEndPointAsync(HttpContext httpContext)
         {
             if (httpContext.Response.StatusCode == StatusCodes.Status404NotFound)

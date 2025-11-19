@@ -1,14 +1,16 @@
 ﻿using DomainLayer.Contracts;
-using DomainLayer.Models.ProductModule;
+using DomainLayer.Models;
 using DomianLayer.Models.IdentityModule;
+using DomianLayer.Models.OrderModule;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Data;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
+using System.Linq;      
+
+
 
 namespace Presistance.Data.DataSeed
 {
@@ -42,11 +44,11 @@ namespace Presistance.Data.DataSeed
             if (!_dbContext.ProductTypes.Any())
             {
                 var typesData = File.OpenRead(@"..\Infrastructure\Presistance\Data\DataSeed\types.json");
-                var types = await JsonSerializer.DeserializeAsync<List<ProductTybe>>(typesData);
+                var types = await JsonSerializer.DeserializeAsync<List<ProductType>>(typesData);
                 if (types != null && types.Any())
                 {
                     await _dbContext.ProductTypes.AddRangeAsync(types);
-                    await _dbContext.SaveChangesAsync(); // ✅ كمان هنا
+                    await _dbContext.SaveChangesAsync();
                 }
             }
             #endregion
@@ -63,11 +65,24 @@ namespace Presistance.Data.DataSeed
                 }
             }
             #endregion
+            #region DeliveryMethod
+            if (!_dbContext.DeliveryMethods.Any())
+            {
+                var DeliveryData = File.OpenRead(@"..\Infrastructure\Presistance\Data\DataSeed\deliveryjson");
+                var Methods = await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(DeliveryData);
+                if (Methods != null && Methods.Any())
+                {
+                    await _dbContext.DeliveryMethods.AddRangeAsync(Methods);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            #endregion
 
             #endregion
         }
 
-        public async Task IdentityDataSeed()
+
+        public async Task IdentityDataSeedAsync()
         {
             try
             {

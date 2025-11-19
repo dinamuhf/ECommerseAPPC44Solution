@@ -1,60 +1,60 @@
-﻿using AutoMapper;
-using DomainLayer.Contracts;
-using DomainLayer.Exceptions;
-using DomainLayer.Models.ProductModule;
-using Service.specifications;
-using ServiceAbstraction;
-using Shared;
-using Shared.DTOS;
-using Shared.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using DomainLayer.Contracts;
+using DomainLayer.Models;
+using DomianLayer.Exceptions;
+using Service.Specifications;
+using ServiceAbstraction;
+using Shared;
+using Shared.Dtos.ProductModule;
+
 
 namespace Service
 {
     public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
     {
-      public  async Task<IEnumerable<BrandDto>> GetAllBrandsAsync()
+        public async Task<IEnumerable<BrandResultDto>> GetAllBrandsAsync()
         {
-           var Repo= _unitOfWork.GetRepository<ProductBrand,int>();
-            var Brands= await Repo.GetAllAsync();
-            var BrandsDto= _mapper.Map<IEnumerable<ProductBrand>,IEnumerable<BrandDto>>(Brands);
+            var Repo = _unitOfWork.GetRepository<ProductBrand, int>();
+            var Brands = await  Repo.GetAllAsync();
+            var BrandsDto = _mapper.Map<IEnumerable<ProductBrand>, IEnumerable<BrandResultDto>>(Brands);
             return BrandsDto;
-
         }
 
-        public async  Task<PaginatedResult<ProductDto>> GetAllproductsAsync(ProductQueryParams queryParams)
+        public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductQueryParams queryParams)
         {
-            var Repo=_unitOfWork.GetRepository<Product,int>();
-            var Specifications = new ProductWithBrandAndTypeSpecifications( queryParams);
-            var AllProducts = await Repo.GetAllAsync( Specifications );
-            var Data=_mapper.Map<IEnumerable<Product>,IEnumerable<ProductDto>>(AllProducts);
-            var ProductCount= AllProducts.Count();
-            var CountSpec=new ProductCountSpecifications(queryParams);
-            var TotalCount= await Repo.CountAsync(CountSpec);
+            var Repo = _unitOfWork.GetRepository<Product, int>();
+            var Specifications = new ProductWithBrandAndTypeSpecifications(queryParams);
+            var AllProducts = await Repo.GetAllAsync(Specifications);
+            var Data = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductResultDto>>(AllProducts);
 
-            return new PaginatedResult<ProductDto>(queryParams.PageIndex, ProductCount, TotalCount, Data);
+            var ProductCount = AllProducts.Count();
+            var CountSpec = new ProductCountSpecifications(queryParams);
+            var TotalCount = await Repo.CountAsync(CountSpec);
+            return new PaginatedResult<ProductResultDto>(queryParams.pageNumber, ProductCount, TotalCount, Data);
+           
         }
 
-        public async  Task<IEnumerable<TypeDto>> GetAllTypesAsync()
+        public async Task<IEnumerable<TypeResultDto>> GetAllTypesAsync()
         {
-        var Types= await _unitOfWork.GetRepository<ProductTybe,int>().GetAllAsync();
-            return  _mapper.Map<IEnumerable<ProductTybe>,IEnumerable<TypeDto>>(Types);
+            var Types = await _unitOfWork.GetRepository<ProductType, int>().GetAllAsync();
+            return _mapper.Map<IEnumerable<ProductType>, IEnumerable<TypeResultDto>>(Types);
         }
 
-    public async   Task<ProductDto?> GetProductByIdAsync(int id)
+        public async Task<ProductResultDto?> GetProductByIdAsync(int Id)
         {
-            var Specifications = new ProductWithBrandAndTypeSpecifications(id);
-            var product= await _unitOfWork.GetRepository<Product,int>().GetByIdAsync(Specifications);
-            if (product == null)
+            var Specifications = new ProductWithBrandAndTypeSpecifications(Id);
+            var Product = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(Specifications);
+            if(Product is null)
             {
-                throw new ProductNotFoundException(id);
+                throw new ProductNotFoundException(Id);
             }
-            return _mapper.Map<Product, ProductDto>(product);
-
+            
+            return _mapper.Map<Product, ProductResultDto>(Product);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Persentation.Controllers
     public class ProductsController(IServiceManager _serviceManager) : APIBaseController
     {
         #region Get All Products
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery] ProductQueryParams queryParams)
         {

@@ -24,13 +24,13 @@ namespace Service
 
         public async Task<UserResultDto> LoginAsync(LoginDto loginDto)
         {
-          
+           
             var User = await _userManager.FindByEmailAsync(loginDto.Email);
             if (User is null)
             {
                 throw new UserNotFoundException(loginDto.Email);
             }
-
+        
             var IsPasswordValid = await _userManager.CheckPasswordAsync(User, loginDto.Password);
             if(IsPasswordValid)
             {
@@ -47,7 +47,7 @@ namespace Service
 
         public async Task<UserResultDto> RegisterAsync(RegisterDto registerDto)
         {
-         
+     
             var User = new ApplicationUser()
             {
                 Email = registerDto.Email,
@@ -56,7 +56,7 @@ namespace Service
                 UserName = registerDto.UserName
 
             };
-            
+         
             var Result = await _userManager.CreateAsync(User, registerDto.Password);
              if(Result.Succeeded)
             {
@@ -87,11 +87,11 @@ namespace Service
              foreach( var role in Roles)
             
                 Claims.Add(new Claim(ClaimTypes.Role, role));
-        
+   
             var SecretKey = Configuration.GetSection("JWTOptions")["SecretKey"];
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
             var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
-     
+         
             var Token = new JwtSecurityToken(
                 issuer: Configuration["JWTOptions:Issuer"],
                 audience: Configuration["JWTOptions:Audience"],
@@ -146,7 +146,7 @@ namespace Service
             }
             else
             {
-           
+                
                 User.Address = _mapper.Map<AddressDto, Address>(addressDto);
             }
 

@@ -1,49 +1,30 @@
-﻿using DomainLayer.Models.ProductModule;
-using Shared;
-using Shared.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DomainLayer.Models;
+using Shared;
 
-namespace Service.specifications
+namespace Service.Specifications
 {
-    public class ProductWithBrandAndTypeSpecifications: BaseSpecifications<Product, int>
+    public class ProductWithBrandAndTypeSpecifications:BaseSpecifications<Product,int>
     {
+        //Get All Products With Types And Brands
         public ProductWithBrandAndTypeSpecifications(ProductQueryParams queryParams)
-            : base
-            (p => (!queryParams.BrandId.HasValue || p.BrandId == queryParams.BrandId) &&
-            (!queryParams.TypeId.HasValue || p.TybeId == queryParams.TypeId) &&
-            (string.IsNullOrWhiteSpace(queryParams.SearchValue) || p.Name.Contains(queryParams.SearchValue.ToLower())
-            ))
-           
+           : base(P => (!queryParams.BrandId.HasValue || P.BrandId == queryParams.BrandId)
+           && (!queryParams.TypeId.HasValue || P.TypeId == queryParams.TypeId)
+           && (string.IsNullOrWhiteSpace(queryParams.search) || P.Name.Contains(queryParams.search.ToLower())))
         {
-            AddInclude(p => p.ProductBrand);
-            AddInclude(p => p.ProductTybe);
-            ApplyPagination(queryParams.PageSize, queryParams.PageIndex);
-            #region Sorting
-            switch (queryParams.SortingOptions)
-            {
-                case ProductSortingOptions.NameAsc:AddOrderBy(P=>P.Name);
-                    break;
-                    case ProductSortingOptions.NameDesc:AddOrderByDescending(P=>P.Name);
-                    break;
-                    case ProductSortingOptions.PriceAsc:AddOrderBy(P=>P.Price);
-                    break;
-                    case ProductSortingOptions.PriceDesc:
-                    AddOrderByDescending(P=>P.Price);
-                    break;
-                    default:
-                    break;
-            }
+            AddInclude(P => P.ProductBrand);
+            AddInclude(P => P.ProductType);
+            ApplyPagination(queryParams.PageSize, queryParams.pageNumber);
+        }
+        public ProductWithBrandAndTypeSpecifications(int id ):base(P=>P.Id==id)
+        {
+            AddInclude(P => P.ProductBrand);
+            AddInclude(P => P.ProductType);
+        }
 
-            #endregion
-        }
-        public ProductWithBrandAndTypeSpecifications(int id) : base(p => p.Id == id)
-        {
-            AddInclude(p => p.ProductBrand);
-            AddInclude(p => p.ProductTybe);
-        }
     }
 }

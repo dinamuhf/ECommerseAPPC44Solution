@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.Models.ProductModule
+namespace DomainLayer.Models
 {
-  public class BaseEntity <TKey>
+    public class ProductBrand:BaseEntity<int>
     {
-        public TKey Id { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

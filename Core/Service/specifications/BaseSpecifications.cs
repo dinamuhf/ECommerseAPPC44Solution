@@ -1,48 +1,55 @@
-﻿using DomainLayer.Contracts;
-using DomainLayer.Models.ProductModule;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using DomainLayer.Models;
+using DomianLayer.Contracts;
 
-namespace Service.specifications
+namespace Service.Specifications
 {
-    public abstract class BaseSpecifications <TEntity, TKey> : ISpecifications<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public abstract class BaseSpecifications<TEntity, Tkey> : ISpecifications<TEntity, Tkey> where TEntity : BaseEntity<Tkey>
     {
-        public BaseSpecifications(Expression<Func<TEntity,bool>> CriteriaExpression)
-        { 
-            Criteria= CriteriaExpression;
+        protected BaseSpecifications(Expression<Func<TEntity, bool>> CriteriaExpression)
+        {
+            Criteria = CriteriaExpression;
         }
         public Expression<Func<TEntity, bool>>? Criteria { get; private set; }
 
-        public List<Expression<Func<TEntity, object>>> IncludeExpression { get; } = [];
+        public List<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = [];
+
         public Expression<Func<TEntity, object>> OrderBy { get; private set; }
-        protected void AddOrderBy(Expression<Func<TEntity, object>> orderByAsc)
-       =>  OrderBy = orderByAsc;
+
         public Expression<Func<TEntity, object>> OrderByDescending { get; private set; }
 
-        #region pagination
-        public int Take {  get;  private set; }
+        #region Pagination
+        public int Take { get; private set; }
 
         public int Skip { get; private set; }
 
-        public bool IsPagination {  get;  set; }
-        protected void ApplyPagination (int PageSize, int PageIndex)
+        public bool IsPaginated { get ; set ; } 
+        //Total Count =40
+        //Page Size =10
+       //Page Index = 2
+       //10 ,10,10,10                        10             //2
+        protected void ApplyPagination (int PageSize,int PageIndex)
         {
-            IsPagination= true;
-                Take= PageSize;
-            Skip= (PageIndex-1)* PageSize;
+            IsPaginated = true;
+            Take = PageSize;
+            Skip = (PageIndex - 1) * PageSize;  //1*10 =10
+
         }
         #endregion
-        protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDesc)
-            => OrderByDescending = orderByDesc;
+
+        protected void AddOrderBy(Expression<Func<TEntity, object>> oderByExp) => OrderBy = oderByExp;
+
+        protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDescendingExp) => OrderByDescending = orderByDescendingExp;
 
         protected void AddInclude(Expression<Func<TEntity, object>> includeExpression)
-        {
-            IncludeExpression.Add(includeExpression);
-        }
         
+          =>  IncludeExpressions.Add(includeExpression);
+        
+    
     }
 }

@@ -13,14 +13,14 @@ using Shared.Dtos.BasketModule;
 
 namespace Service
 {
-    public class BasketService(IBasketRepository _basketRepository, IMapper _mapper) : IBasketService
+   public  class BasketService(IBasketRepository _basketRepository, IMapper _mapper) : IBasketService
     {
         public async Task<BasketDto?> CreatedOrUpdatedBasketAsync(BasketDto basketDto)
         {
             var CustomerBasket = _mapper.Map<BasketDto, CustomerBasket>(basketDto);
-            var CreatedOrUpdatesBasket = await _basketRepository.CreatedOrUpdatedBasketAsync(CustomerBasket);
-
-            if (CreatedOrUpdatesBasket is not null)
+            var CreatedOrUpdatesBasket = await  _basketRepository.CreatedOrUpdatedBasketAsync(CustomerBasket);
+           
+            if(CreatedOrUpdatesBasket is not null)
             {
                 return await GetBasketAsync(basketDto.Id);
             }
@@ -32,12 +32,12 @@ namespace Service
 
         }
 
-
+      
 
         public async Task<BasketDto?> GetBasketAsync(string Key)
         {
             var Basket = await _basketRepository.GetBasketAsync(Key);
-            if (Basket is not null)
+            if(Basket is not null)
             {
                 return _mapper.Map<CustomerBasket, BasketDto>(Basket);
             }
